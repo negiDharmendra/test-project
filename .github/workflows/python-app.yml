@@ -21,6 +21,8 @@ jobs:
         echo ${{github.event.pull_request.url}}
         echo ${{github.event.pull_request.comments_url }}
         echo ${{github.event.comment.body }}
+        echo ${{github.event.comment.issue_url }}
+        echo ${{github.event.comment.html_url }}
         echo ${{github.event_name}}
         echo ${{github.ref}}
         echo ${{github.ref_name}}
