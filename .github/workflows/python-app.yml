@@ -21,6 +21,7 @@ jobs:
         echo ${{github.event}}
         echo ${{github.ref}}
         echo ${{github.ref_name}}
+        echo ${{github.sha}}
   build:
 
     runs-on: ubuntu-latest
