@@ -15,7 +15,7 @@ permissions:
 jobs:
   job_detail:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == "issue_comment" }}
+    if: ${{ github.event_name == 'issue_comment' }}
     outputs:
       BRANCH: ${{steps.load-pr.outputs.branch }}
     steps:
@@ -42,11 +42,11 @@ jobs:
     needs: job_detail
     steps:
     - uses: actions/checkout@v3
-      if: github.event_name == "issue_comment"
+      if: github.event_name == 'issue_comment'
       with:
         ref: ${{ needs.job_detail.outputs.BRANCH }}
     - uses: actions/checkout@v3
-      if: ${{ github.event_name != "issue_comment" }}
+      if: ${{ github.event_name != 'issue_comment' }}
     - name: Set up Python 3.8
       uses: actions/setup-python@v3
       with:
