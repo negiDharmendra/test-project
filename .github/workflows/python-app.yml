@@ -11,8 +11,7 @@ on:
 
 permissions:
   pull-requests: read
-  repository-projects: read
-
+  contents: read
 jobs:
   job_detail:
     runs-on: ubuntu-latest
