@@ -24,11 +24,8 @@ jobs:
         echo ${{github.event.comment.issue_url }}
         echo ${{github.event.comment.html_url }}
         echo ${{ github.event.issue.pull_request.url }}
-        echo ${{github.event_name}}
-        echo ${{github.ref}}
-        echo ${{github.ref_name}}
-        echo ${{github.sha}}
-        echo ${{github.head_ref}}
+        
+        curl -sSf --url ${{ github.event.issue.pull_request.url }} --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}'  --header 'content-type: application/json'
   build:
 
     runs-on: ubuntu-latest
