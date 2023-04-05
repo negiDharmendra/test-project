@@ -15,7 +15,6 @@ permissions:
 jobs:
   job_detail:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'issue_comment' }}
     outputs:
       BRANCH: ${{steps.load-pr.outputs.branch }}
     steps:
@@ -23,7 +22,7 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: "3.8"
-    - id: load-pr
+    - name: Echo data
       run: |
         echo ${{github.event.pull_request.url}}
         echo ${{github.event.pull_request.comments_url }}
@@ -32,7 +31,9 @@ jobs:
         echo ${{github.event.comment.issue_url }}
         echo ${{github.event.comment.html_url }}
         echo ${{ github.event.issue.pull_request.url }}
-        
+    - id: load-pr
+      if: ${{ github.event_name == 'issue_comment' }}
+      run: |
         response=$(curl -sSf --url ${{ github.event.issue.pull_request.url }} --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}'  --header 'content-type: application/json')
         branch=$(python3 -c "import sys, json; print(json.load(sys.stdin)['head']['ref'])" <<< "$response")
         echo "::set-output name=branch::$branch"
