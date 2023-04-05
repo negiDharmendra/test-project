@@ -23,6 +23,7 @@ jobs:
         echo ${{github.event.comment.body }}
         echo ${{github.event.comment.issue_url }}
         echo ${{github.event.comment.html_url }}
+        echo ${{ github.event.issue.pull_request.url }}
         echo ${{github.event_name}}
         echo ${{github.ref}}
         echo ${{github.ref_name}}
@@ -34,10 +35,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python 3.10
+    - name: Set up Python 3.8
       uses: actions/setup-python@v3
       with:
-        python-version: "3.10"
+        python-version: "3.8"
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
