@@ -11,12 +11,13 @@ on:
   issue_comment:
 
 permissions:
-  pull-requests: read|write
+  pull-requests: read
 
 jobs:
   job_detail:
     runs-on: ubuntu-latest
     steps:
+    - run: apt-get install -y jq
     - run: |
         echo ${{github.event.pull_request.url}}
         echo ${{github.event.pull_request.comments_url }}
