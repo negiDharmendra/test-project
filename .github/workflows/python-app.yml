@@ -17,9 +17,11 @@ jobs:
   job_detail:
     runs-on: ubuntu-latest
     steps:
+    - run: yum install -y jq
     - run: |
+        
         echo ${{github.event_name}}
-        echo ${{github.event}}
+        echo ${{github.event}} | jq "."
         echo ${{github.ref}}
         echo ${{github.ref_name}}
         echo ${{github.sha}}
