@@ -4,6 +4,7 @@
 name: Python application
 
 on:
+  pull_request:
   push:
     tags:       
       - v1.*
@@ -27,6 +28,8 @@ jobs:
       run: |
         echo ${{github.ref}}
         echo ${{github.ref_name}}
+        echo ${{github.head_ref}}
+        echo ${{github.ref_type}}
         echo ${{github.event.pull_request.url}}
         echo ${{github.event.pull_request.comments_url }}
         echo ${{github.event_name}}
