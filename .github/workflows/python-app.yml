@@ -26,17 +26,17 @@ jobs:
         python-version: "3.8"
     - name: Echo data
       run: |
-        echo ${{github.ref}}
-        echo ${{github.ref_name}}
-        echo ${{github.head_ref}}
-        echo ${{github.ref_type}}
-        echo ${{github.event.pull_request.url}}
-        echo ${{github.event.pull_request.comments_url }}
-        echo ${{github.event_name}}
-        echo ${{github.event.comment.body }}
-        echo ${{github.event.comment.issue_url }}
-        echo ${{github.event.comment.html_url }}
-        echo ${{ github.event.issue.pull_request.url }}
+        echo "github.ref ==> ${{github.ref}}"
+        echo "github.ref_name ====> ${{github.ref_name}}"
+        echo "github.head_ref ====> ${{github.head_ref}}"
+        echo "github.ref_type ====> ${{github.ref_type}}"
+        echo "github.event.pull_request.url ====> ${{github.event.pull_request.url}}"
+        echo "github.event.pull_request.comments_url  ====> ${{github.event.pull_request.comments_url }}"
+        echo "github.event_name ====> ${{github.event_name}}"
+        echo "github.event.comment.body  ====> ${{github.event.comment.body }}"
+        echo "github.event.comment.issue_url  ====> ${{github.event.comment.issue_url }}"
+        echo "github.event.comment.html_url  ====> ${{github.event.comment.html_url }}"
+        echo " github.event.issue.pull_request.url  ====> ${{ github.event.issue.pull_request.url }}"
     - id: load-pr
       if: ${{ github.event_name == 'issue_comment' }}
       run: |
