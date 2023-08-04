@@ -73,5 +73,7 @@ jobs:
         chmod +x ./script.sh
         echo "${{ secrets.SEC_ONE }} ${{ vars.VAR_ONE}}"
         echo '${{ secrets.SEC_ONE }} ${{ vars.VAR_ONE}}'
+        ./script.sh '${{ secrets.SEC_ONE }}' '${{ vars.VAR_ONE}}'
+        echo "============================"
         ./script.sh ${{ secrets.SEC_ONE }} ${{ vars.VAR_ONE}}
     
