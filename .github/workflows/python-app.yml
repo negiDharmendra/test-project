@@ -33,10 +33,15 @@ jobs:
         ./script.sh ${{ secrets.SEC_ONE }} ${{ vars.VAR_ONE}}
         echo "--------------------------------"
         echo "::add-mask::${{ vars.VAR_ONE}}"
+        echo "TESTENV_VAR=${{ vars.VAR_ONE}}" >> $GITHUB_ENV
         echo "${{ secrets.SEC_ONE }} ${{ vars.VAR_ONE}}"
         echo '${{ secrets.SEC_ONE }} ${{ vars.VAR_ONE}}'
         ./script.sh '${{ secrets.SEC_ONE }}' '${{ vars.VAR_ONE}}'
         echo "============================"
         ./script.sh ${{ secrets.SEC_ONE }} ${{ vars.VAR_ONE}}
+    - name: Test Env
+      run:
+        echo $TESTENV_VAR
+        echo "${{ vars.VAR_ONE}}"
       
         
