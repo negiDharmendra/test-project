@@ -40,7 +40,7 @@ jobs:
         echo "============================"
         ./script.sh ${{ secrets.SEC_ONE }} ${{ vars.VAR_ONE}}
     - name: Test Env
-      run:
+      run: |
         echo $TESTENV_VAR
         echo "${{ vars.VAR_ONE}}"
       
