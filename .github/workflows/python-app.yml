@@ -26,15 +26,19 @@ jobs:
     - name: Run script
       run: |
         chmod +x ./script.sh
+        echo $VAR_ONE
         echo "${{ secrets.SEC_ONE }} ${{ vars.VAR_ONE}}"
         echo '${{ secrets.SEC_ONE }} ${{ vars.VAR_ONE}}'
         ./script.sh '${{ secrets.SEC_ONE }}' '${{ vars.VAR_ONE}}'
         echo "============================"
         ./script.sh ${{ secrets.SEC_ONE }} ${{ vars.VAR_ONE}}
-
-        echo "::add-mask::VAR_ONE"
+        echo "--------------------------------"
+        echo "::add-mask::$VAR_ONE"
+        echo $VAR_ONE
         echo "${{ secrets.SEC_ONE }} ${{ vars.VAR_ONE}}"
         echo '${{ secrets.SEC_ONE }} ${{ vars.VAR_ONE}}'
         ./script.sh '${{ secrets.SEC_ONE }}' '${{ vars.VAR_ONE}}'
         echo "============================"
         ./script.sh ${{ secrets.SEC_ONE }} ${{ vars.VAR_ONE}}
+      
+        
