@@ -54,5 +54,6 @@ jobs:
     steps:
       - run: |
            echo "${{ needs.build.output.dynamic_env}}"
+           echo "${{ env.DYNAMIC_ENV }}"
       
         
