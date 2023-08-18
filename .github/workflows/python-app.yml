@@ -15,8 +15,9 @@ permissions:
   contents: read
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    outputs:
+      dynamic_env: ${{ env.DYNAMIC_ENV }}
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.8
@@ -40,8 +41,18 @@ jobs:
         echo "============================"
         ./script.sh ${{ secrets.SEC_ONE }} ${{ vars.VAR_ONE}}
     - name: Test Env
+      id: dynamic_env_step
       run: |
         echo $TESTENV_VAR
         echo "${{ vars.VAR_ONE}}"
+        echo "DYNAMIC_ENV=${{ github.ref_name }}" >> $GITHUB_ENV
+        
+
+  nextjob:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - run: |
+           echo "${{ needs.build.output.dynamic_env}}
       
         
