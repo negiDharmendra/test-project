@@ -17,7 +17,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
-      dynamic_env: ${{ env.DYNAMIC_ENV }}
+      dynamic_env: ${{ steps.dynamic_env_step.outputs.DYNAMIC_ENV }}
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.8
@@ -45,7 +45,7 @@ jobs:
       run: |
         echo $TESTENV_VAR
         echo "${{ vars.VAR_ONE}}"
-        echo "DYNAMIC_ENV=${{ github.ref_name }}" >> $GITHUB_ENV
+        echo "DYNAMIC_ENV=${{ github.ref_name }}" >> $GITHUB_OUTPUT
         
 
   nextjob:
