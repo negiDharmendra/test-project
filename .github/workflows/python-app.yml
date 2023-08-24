@@ -30,6 +30,7 @@ jobs:
           echo "branch=$branch" >> $GITHUB_OUTPUT
           latest_version=$(echo ${{ github.event.comment.body }} | grep -o "version=*.*.*" | cut -d "=" -f 2)
           echo "latest_version=$latest_version"
+          echo "github.event.type  ---> ${{ github.event.type }}"
           echo "latest_version=$(echo ${{ github.event.comment.body }} | grep -o "version=*.*.*" | cut -d "=" -f 2)" >> $GITHUB_OUTPUT
     outputs:
       latest_version: ${{ steps.extract_pr_details.outputs.latest_version }}
