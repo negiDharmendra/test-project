@@ -10,9 +10,9 @@ on:
       - v1.*
   issue_comment:
 
-permissions:
-  pull-requests: read
-  contents: read
+# permissions:
+#   pull-requests: read
+#   contents: read
 jobs:
   pr_details:
     if: github.event.issue.pull_request && startsWith(github.event.comment.body, 'publish version=')
