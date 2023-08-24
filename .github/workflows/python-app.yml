@@ -14,46 +14,34 @@ permissions:
   pull-requests: read
   contents: read
 jobs:
-  build:
+  pr_details:
+    if: github.event.issue.pull_request && startsWith(github.event.comment.body, 'publish version=')
     runs-on: ubuntu-latest
-    outputs:
-      dynamic_env: ${{ steps.dynamic_env_step.outputs.DYNAMIC_ENV }}
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.10"
-    - name: Run script
-      run: |
-        chmod +x ./script.sh
-        echo "${{ secrets.SEC_ONE }} ${{ vars.VAR_ONE}}"
-        echo '${{ secrets.SEC_ONE }} ${{ vars.VAR_ONE}}'
-        ./script.sh '${{ secrets.SEC_ONE }}' '${{ vars.VAR_ONE}}'
-        echo "============================"
-        ./script.sh ${{ secrets.SEC_ONE }} ${{ vars.VAR_ONE}}
-        echo "--------------------------------"
-        echo "::add-mask::${{ vars.VAR_ONE}}"
-        echo "TESTENV_VAR=${{ vars.VAR_ONE}}" >> $GITHUB_ENV
-        echo "${{ secrets.SEC_ONE }} ${{ vars.VAR_ONE}}"
-        echo '${{ secrets.SEC_ONE }} ${{ vars.VAR_ONE}}'
-        ./script.sh '${{ secrets.SEC_ONE }}' '${{ vars.VAR_ONE}}'
-        echo "============================"
-        ./script.sh ${{ secrets.SEC_ONE }} ${{ vars.VAR_ONE}}
-    - name: Test Env
-      id: dynamic_env_step
-      run: |
-        echo $TESTENV_VAR
-        echo "${{ vars.VAR_ONE}}"
-        echo "DYNAMIC_ENV=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+      - name: Get value from comment
+        id: extract_pr_details
+        run: |
+          response=$(curl -sSf --url ${{ github.event.issue.pull_request.url }} --header 'authorization: Bearer ${{ secrets.GIT_ACCESS_TOKEN }}'  --header 'content-type: application/json')
+          branch=$(python3 -c "import sys, json; print(json.load(sys.stdin)['head']['ref'])" <<< "$response")
+          echo "branch=$branch" >> $GITHUB_OUTPUT
+          echo "latest_version=$(echo ${{ github.event.comment.body }} | grep -o "version=*.*.*" | cut -d "=" -f 2)" >> "GITHUB_OUTPUT"
+    outputs:
+      latest_version: ${{ steps.extract_pr_details.outputs.latest_version }}
+      branch: ${{ steps.extract_pr_details.outputs.branch }}
         
 
   nextjob:
     runs-on: ubuntu-latest
-    needs: build
+    needs: pr_details
     steps:
-      - run: |
-           echo "${{ needs.build.outputs.dynamic_env}}"
-           echo "${{ env.DYNAMIC_ENV }}"
+      - name: Print pr details for ${{ needs.pr_details.outputs.branch}}
+        run: |
+           echo "Current pr branch : ${{ needs.pr_details.outputs.branch}}"
+           echo "Current version : ${{ needs.pr_details.outputs.latest_version}}"
+        
       
         
