@@ -28,8 +28,9 @@ jobs:
           response=$(curl -sSf --url ${{ github.event.issue.pull_request.url }} --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}'  --header 'content-type: application/json')
           branch=$(python3 -c "import sys, json; print(json.load(sys.stdin)['head']['ref'])" <<< "$response")
           echo "branch=$branch" >> $GITHUB_OUTPUT
-          echo "latest_version=$(echo ${{ github.event.comment.body }} | grep -o "version=*.*.*" | cut -d "=" -f 2)"
-          echo "latest_version=$(echo ${{ github.event.comment.body }} | grep -o "version=*.*.*" | cut -d "=" -f 2)" >> "GITHUB_OUTPUT"
+          latest_version=$(echo ${{ github.event.comment.body }} | grep -o "version=*.*.*" | cut -d "=" -f 2)
+          echo "latest_version=$latest_version"
+          echo "latest_version=$latest_version" >> "GITHUB_OUTPUT"
     outputs:
       latest_version: ${{ steps.extract_pr_details.outputs.latest_version }}
       branch: ${{ steps.extract_pr_details.outputs.branch }}
