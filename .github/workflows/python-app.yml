@@ -10,10 +10,25 @@ on:
       - v1.*
   issue_comment:
 
-# permissions:
-#   pull-requests: read
-#   contents: read
+permissions:
+  pull-requests: read
+  contents: read
 jobs:
+  on_tag:
+    if: ${{ !github.event.issue.pull_request }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "github.ref_name  ==> ${{ github.ref_name }}"
+          echo "github.event.issue.pull_request  ==> ${{ github.event.issue.pull_request }}"
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref_name }}
   pr_details:
     if: github.event.issue.pull_request && startsWith(github.event.comment.body, 'publish version=')
     runs-on: ubuntu-latest
@@ -25,6 +40,8 @@ jobs:
       - name: Get value from comment
         id: extract_pr_details
         run: |
+          echo "github.ref_name  ==> ${{ github.ref_name }}"
+          echo "github.event.issue.pull_request  ==> ${{ github.event.issue.pull_request }}"
           response=$(curl -sSf --url ${{ github.event.issue.pull_request.url }} --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}'  --header 'content-type: application/json')
           branch=$(python3 -c "import sys, json; print(json.load(sys.stdin)['head']['ref'])" <<< "$response")
           echo "branch=$branch" >> $GITHUB_OUTPUT
