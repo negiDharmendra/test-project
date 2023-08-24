@@ -25,7 +25,7 @@ jobs:
       - name: Get value from comment
         id: extract_pr_details
         run: |
-          response=$(curl -sSf --url ${{ github.event.issue.pull_request.url }} --header 'authorization: Bearer ${{ secrets.GIT_ACCESS_TOKEN }}'  --header 'content-type: application/json')
+          response=$(curl -sSf --url ${{ github.event.issue.pull_request.url }} --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}'  --header 'content-type: application/json')
           branch=$(python3 -c "import sys, json; print(json.load(sys.stdin)['head']['ref'])" <<< "$response")
           echo "branch=$branch" >> $GITHUB_OUTPUT
           echo "latest_version=$(echo ${{ github.event.comment.body }} | grep -o "version=*.*.*" | cut -d "=" -f 2)" >> "GITHUB_OUTPUT"
