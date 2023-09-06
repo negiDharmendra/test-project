@@ -14,54 +14,38 @@ permissions:
   pull-requests: read
   contents: read
 jobs:
-  on_tag:
-    if: ${{ !github.event.issue.pull_request }}
+  job1:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo "github.ref_name  ==> ${{ github.ref_name }}"
-          echo "github.event.issue.pull_request  ==> ${{ github.event.issue.pull_request }}"
-      - name: Set up Python 3.9
-        uses: actions/setup-python@v3
-        with:
-          python-version: "3.9"
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          ref: ${{ github.ref_name }}
-  pr_details:
-    if: github.event.issue.pull_request && startsWith(github.event.comment.body, 'publish version=')
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up Python 3.9
-        uses: actions/setup-python@v3
-        with:
-          python-version: "3.9"
-      - name: Get value from comment
-        id: extract_pr_details
+      - id:  extract_version
+        name: Extract version from ${{  github.ref_name }}
         run: |
-          echo "github.ref_name  ==> ${{ github.ref_name }}"
-          echo "github.event.issue.pull_request  ==> ${{ github.event.issue.pull_request }}"
-          response=$(curl -sSf --url ${{ github.event.issue.pull_request.url }} --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}'  --header 'content-type: application/json')
-          branch=$(python3 -c "import sys, json; print(json.load(sys.stdin)['head']['ref'])" <<< "$response")
-          echo "branch=$branch" >> $GITHUB_OUTPUT
-          latest_version=$(echo ${{ github.event.comment.body }} | grep -o "version=*.*.*" | cut -d "=" -f 2)
-          echo "latest_version=$latest_version"
-          echo "github.event.type  ---> ${{ github.event.type }}"
-          echo "latest_version=$(echo ${{ github.event.comment.body }} | grep -o "version=*.*.*" | cut -d "=" -f 2)" >> $GITHUB_OUTPUT
+            version=$(echo "${{ github.ref_name }}" | cut -d 'v' -f 2)\
+            echo "version=$version" >> $GITHUB_OUTPUT
     outputs:
-      latest_version: ${{ steps.extract_pr_details.outputs.latest_version }}
-      branch: ${{ steps.extract_pr_details.outputs.branch }}
-        
+      version: ${{ steps.extract_version.outputs.version }}
 
-  nextjob:
+  job2:
     runs-on: ubuntu-latest
-    needs: pr_details
+    needs: job1
     steps:
-      - name: Print pr details for ${{ needs.pr_details.outputs.branch}}
+      - name: Running job 2 ${{ needs.job1.outputs.version }}
+        id: job1_step
         run: |
-           echo "Current pr branch : ${{ needs.pr_details.outputs.branch}}"
-           echo "Current version : ${{ needs.pr_details.outputs.latest_version}}"
+          echo "=needs.job1.outputs.version ==> ${{ needs.job1.outputs.version }}"
+          echo "version1=${{ needs.job1.outputs.version }}" >> $GITHUB_OUTPUT
+    outputs:
+      version: ${{ steps.job1_step.outputs.version1 }}
+
+  job3:
+    runs-on: ubuntu-latest
+    needs: [job1, job2]
+    steps:
+      - name: Running job 3 ${{ needs.job1.outputs.version }} and ${{ needs.job2.outputs.version1 }}
+        run: |
+          echo "=needs.job1.outputs.version ==> ${{ needs.job1.outputs.version }}"
+          echo "=needs.job2.outputs.version ==> ${{ needs.job2.outputs.version }}"
+    
         
       
         
