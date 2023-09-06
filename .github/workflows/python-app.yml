@@ -20,7 +20,7 @@ jobs:
       - id:  extract_version
         name: Extract version from ${{  github.ref_name }}
         run: |
-            version=$(echo "${{ github.ref_name }}" | cut -d 'v' -f 2)\
+            version=$(echo "${{ github.ref_name }}" | cut -d 'v' -f 2)
             echo "version=$version" >> $GITHUB_OUTPUT
     outputs:
       version: ${{ steps.extract_version.outputs.version }}
