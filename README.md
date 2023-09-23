@@ -1,4 +1,4 @@
-![example event parameter](https://github.com/negiDharmendra/test-project/blob/main/.github/workflows/python-app.yml/badge.svg?event=push)
+![example event parameter](https://github.com/github/docs/actions/workflows/main.yml/badge.svg?event=push)
 
 # test-project
 
