@@ -1,4 +1,4 @@
-name: Issue Comment ${{ github.event.comment.body }}
+name: Issue Comment
 on:
   issue_comment:
     types: [ created ]
@@ -10,6 +10,7 @@ jobs:
   job1:
     if: github.event.issue.pull_request && startsWith(github.event.comment.body, 'test comment')
     runs-on: ubuntu-latest
+    name: Job 1 for comment ${{ github.event.comment.body }}
     steps:
       - name: Echo
         run: |
@@ -21,6 +22,7 @@ jobs:
       github.event.issue.pull_request &&
       startsWith(github.event.comment.body, 'test comment')
     runs-on: ubuntu-latest
+    name: Job 2 for comment ${{ github.event.comment.body }}
     steps:
       - name: Echo
         run: |
