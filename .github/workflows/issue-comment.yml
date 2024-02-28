@@ -1,4 +1,4 @@
-name: Issue Comment
+name: Issue Comment {{ github.event.comment.body }}
 on:
   issue_comment:
     types: [ created ]
