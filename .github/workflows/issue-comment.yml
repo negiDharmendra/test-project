@@ -7,12 +7,23 @@ permissions:
   pull-requests: read
   contents: read
 jobs:
-  pr_details:
+  job1:
     if: github.event.issue.pull_request && startsWith(github.event.comment.body, 'test comment')
     runs-on: ubuntu-latest
     steps:
       - name: Echo
         run: |
-          echo "This was triggered for $COMMENT_BODY"
+          echo "This job 1 was triggered for $COMMENT_BODY"
+        env:
+          COMMENT_BODY: ${{ github.event.comment.body }}
+  job2:
+    if: > 
+      github.event.issue.pull_request &&
+      startsWith(github.event.comment.body, 'test comment')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo
+        run: |
+          echo "This job 2 was triggered for $COMMENT_BODY"
         env:
           COMMENT_BODY: ${{ github.event.comment.body }}
